@@ -9,30 +9,42 @@ import data
 def printTravel(init):
     wayTraveled = 0
     cityNow = init
+    optionsUsed = []
     print(data.names[init])
     while cityNow != data.BUCHAREST:
 
-        citySelected, distanceToTravel = getBestWay(cityNow, wayTraveled)
+        citySelected, distanceToTravel = getBestWay(
+            cityNow, wayTraveled, optionsUsed)
 
         cityNow = citySelected
         wayTraveled = wayTraveled + distanceToTravel
 
+        optionsUsed.append(citySelected)
         print(data.names[citySelected])
 
 
-def getBestWay(city, wayTraveled):
+def isIntoArray(value, array):
+    result = False
+    for x in array:
+        if x == value:
+            result = True
+    return result
+
+
+def getBestWay(city, wayTraveled, optionsUsed):
     options = data.connects[city]
     min = 1000000
     citySelected = -1
     distanceToTravel = 0
     for optionCity, distanceToCity in options:
-        g = distanceToCity + wayTraveled
-        h = data.distanceToBucharest[optionCity]
-        f = g + h
-        if (min >= f):
-            min = f
-            citySelected = optionCity
-            distanceToTravel = distanceToCity
+        if (isIntoArray(optionCity, optionsUsed) == False):
+            g = distanceToCity + wayTraveled
+            h = data.distanceToBucharest[optionCity]
+            f = g + h
+            if (min >= f):
+                min = f
+                citySelected = optionCity
+                distanceToTravel = distanceToCity
 
     return {
         citySelected: citySelected,
@@ -40,4 +52,4 @@ def getBestWay(city, wayTraveled):
     }
 
 
-printTravel(data.ARAD)
+printTravel(data.ZERIND)
